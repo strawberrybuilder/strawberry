@@ -1,0 +1,16 @@
+{
+  "name": "딸기백과",
+  "short_name": "딸기백과",
+  "description": "딸기 농사 지식 사전 — 품종·생육·양액·병해충·영상",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FFF6F9",
+  "theme_color": "#E24A6E",
+  "lang": "ko",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
