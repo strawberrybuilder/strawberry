@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>딸기백과 · 딸기 농사 지식 사전</title>
+<meta name="description" content="딸기 농사 지식 사전 — 품종·생육·양액 레시피 계산기·병해충·생리장해·영상">
+<meta name="theme-color" content="#E24A6E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="딸기백과">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+<style>
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css');
+:root{--crimson:#E24A6E;--crimson-deep:#C23A5C;--leaf:#5AA06B;--leaf-light:#86C293;--seed:#F0B84B;--cream:#FFFFFF;--soft:#FFF3F6;--card:#FFFFFF;--ink:#3A2530;--muted:#9B8791;--line:#FBE3EA;--shadow:0 6px 22px rgba(226,74,110,.10)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{font-family:'Pretendard',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;background:#FFF6F9;color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+.serif{font-family:'Gowun Batang',serif}
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--cream);position:relative;padding-bottom:82px;overflow-x:hidden}
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:14px 18px}
+.mark{width:30px;height:30px;flex:none}
+.topbar h1{font-size:19px;font-weight:700;letter-spacing:-.02em}
+.topbar .sub{font-size:11px;color:var(--muted);margin-left:auto}
+.view{display:none;padding:20px 18px 8px;animation:fade .35s ease}
+.view.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.eyebrow{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--crimson);text-transform:uppercase;margin-bottom:10px}
+.eyebrow::before{content:"";width:14px;height:14px;flex:none;background:radial-gradient(circle at 3px 3px,var(--seed) 1.4px,transparent 1.6px),radial-gradient(circle at 10px 4px,var(--seed) 1.4px,transparent 1.6px),radial-gradient(circle at 6px 10px,var(--seed) 1.4px,transparent 1.6px)}
+.h-title{font-size:26px;font-weight:700;letter-spacing:-.03em;margin-bottom:4px}
+.h-desc{font-size:14px;color:var(--muted);margin-bottom:20px}
+.hero{position:relative;border-radius:24px;overflow:hidden;background:linear-gradient(150deg,#F890AB 0%,#E24A6E 100%);color:#fff;padding:26px 22px 24px;margin-bottom:22px;box-shadow:0 10px 26px rgba(226,74,110,.28)}
+.hero::after{content:"";position:absolute;inset:0;opacity:.14;background-image:radial-gradient(circle,#fff 1.3px,transparent 1.6px);background-size:20px 20px;background-position:6px 6px}
+.hero .big{position:absolute;right:-18px;bottom:-22px;width:150px;opacity:.9}
+.hero .kick{font-size:12px;letter-spacing:.2em;opacity:.85;font-weight:600}
+.hero h2{font-size:30px;font-weight:700;letter-spacing:-.03em;margin:6px 0 8px;line-height:1.2;position:relative}
+.hero p{font-size:13.5px;opacity:.9;max-width:76%;position:relative}
+.search{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:11px 14px;margin-bottom:20px;box-shadow:var(--shadow)}
+.search input{border:0;outline:0;background:transparent;font-size:15px;width:100%;color:var(--ink);font-family:inherit}
+.search svg{flex:none;opacity:.5}
+.search .clr{opacity:.4;cursor:pointer;display:none}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+.cat{color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 15px;text-align:left;cursor:pointer;transition:.18s;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px;min-height:112px}
+.cat:active{transform:scale(.97)}
+.cat .ic{width:34px;height:34px}
+.cat b{font-size:16px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.cat span{font-size:11.5px;color:var(--muted);line-height:1.45}
+.month-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px 18px;margin-bottom:22px;box-shadow:var(--shadow)}
+.month-card .now{display:flex;align-items:baseline;gap:10px;margin-bottom:10px}
+.month-card .now b{font-size:17px;color:var(--crimson)}
+.month-card .now .tag{font-size:11px;background:var(--soft);color:var(--crimson-deep);padding:3px 9px;border-radius:20px;font-weight:600}
+.tasklist{list-style:none;display:flex;flex-direction:column;gap:7px}
+.tasklist li{font-size:13.5px;padding-left:18px;position:relative;color:#40312e}
+.tasklist li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:50%;background:var(--leaf-light)}
+.stack{display:flex;flex-direction:column;gap:11px}
+.acc{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+.acc-head{display:flex;align-items:center;gap:12px;padding:12px 15px;cursor:pointer}
+.thumb{width:52px;height:52px;border-radius:13px;flex:none;overflow:hidden;position:relative;background:#FFF1F5;border:1px solid var(--line)}
+.thumb svg,.pic svg{position:absolute;inset:0;width:100%;height:100%}
+.thumb img,.pic img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:2}
+.acc-head .dot{width:11px;height:11px;border-radius:50%;flex:none}
+.acc-head .t{flex:1;min-width:0}
+.acc-head .t b{font-size:15.5px;font-weight:700;letter-spacing:-.02em;display:block}
+.acc-head .t small{font-size:11.5px;color:var(--muted)}
+.acc-head .chev{transition:.25s;color:var(--muted);flex:none}
+.acc.open .chev{transform:rotate(180deg)}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .3s ease}
+.acc-inner{padding:2px 16px 16px;font-size:13.5px;color:#463634}
+.acc-inner .lbl{font-weight:700;color:var(--crimson-deep);font-size:12px;display:block;margin:10px 0 3px}
+.acc-inner .lbl:first-child{margin-top:0}
+.timeline{margin-bottom:22px;display:flex;flex-direction:column;gap:13px}
+.step{display:flex;gap:13px;align-items:flex-start}
+.step .pic{width:60px;height:60px;border-radius:15px;flex:none;overflow:hidden;background:#FFF1F5;border:1px solid var(--line);position:relative}
+.step .txt{flex:1;padding-top:2px}
+.step .per{font-size:11px;color:var(--seed);font-weight:700;letter-spacing:.04em}
+.step .txt b{font-size:15px;font-weight:700;display:block}
+.step .txt p{font-size:12.5px;color:var(--muted);margin-top:2px;line-height:1.5}
+.dtable{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:14px}
+.dtable .cap{padding:13px 16px 4px;font-weight:700;font-size:14.5px}
+.dtable table{width:100%;border-collapse:collapse}
+.dtable td{padding:9px 16px;font-size:13px;border-top:1px solid var(--line)}
+.dtable td:first-child{color:var(--muted);width:44%}
+.dtable td:last-child{font-weight:600;text-align:right}
+.note{font-size:11.5px;color:var(--muted);background:var(--soft);border:1px dashed #F3A9BE;border-radius:12px;padding:11px 13px;margin-bottom:16px;line-height:1.5}
+.note b{color:var(--crimson-deep)}
+.machine{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:var(--shadow)}
+.machine .badge{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;color:#fff;padding:4px 11px;border-radius:20px;margin-bottom:9px}
+.machine h3{font-size:18px;font-weight:700}
+.machine .model{font-size:12px;color:var(--muted);margin-bottom:11px}
+.machine ul{list-style:none;display:flex;flex-direction:column;gap:7px;margin-top:4px}
+.machine ul li{font-size:13px;padding-left:20px;position:relative;color:#463634}
+.machine ul li::before{content:"✓";position:absolute;left:0;color:var(--leaf);font-weight:700}
+.brand{font-size:11.5px;color:var(--muted);margin-top:12px;padding-top:11px;border-top:1px solid var(--line)}
+.vid{display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:13px 14px;margin-bottom:11px;box-shadow:var(--shadow);text-decoration:none;color:inherit}
+.vid .play{width:42px;height:42px;border-radius:12px;flex:none;display:grid;place-items:center;background:linear-gradient(145deg,var(--crimson),var(--crimson-deep))}
+.vid .meta{flex:1;min-width:0}
+.vid .meta b{font-size:14px;font-weight:700;display:block}
+.vid .meta small{font-size:11.5px;color:var(--muted);display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vid .src{font-size:10px;font-weight:700;color:var(--leaf);flex:none}
+.empty{text-align:center;color:var(--muted);font-size:13px;padding:30px 0}
+.res-head{font-size:12px;color:var(--muted);margin-bottom:12px}
+.res-head b{color:var(--crimson)}
+.res{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px;cursor:pointer;box-shadow:var(--shadow)}
+.res:active{transform:scale(.98)}
+.res .rt{flex:1;min-width:0}
+.res .rt b{font-size:14.5px;font-weight:700;display:block}
+.res .rt small{font-size:11.5px;color:var(--muted)}
+.res .cta{font-size:10px;font-weight:700;color:#fff;background:var(--crimson);padding:4px 9px;border-radius:20px;flex:none}
+/* variety */
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px}
+.chip{flex:none;padding:8px 15px;border-radius:20px;border:1px solid var(--line);background:var(--card);font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;font-family:inherit}
+.chip.on{background:var(--crimson);color:#fff;border-color:var(--crimson)}
+.varcard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);margin-bottom:22px}
+.varcard .vh{display:flex;align-items:center;gap:9px;margin-bottom:2px}
+.varcard h3{font-size:20px;font-weight:700}
+.varcard .vtag{font-size:10.5px;font-weight:700;color:#fff;background:var(--leaf);padding:3px 9px;border-radius:20px}
+.varcard .sc{font-size:11.5px;color:var(--seed);font-weight:700}
+.varcard p.tr{font-size:13px;color:#463634;margin-top:9px;line-height:1.55}
+.varcard .row{display:flex;gap:8px;margin-top:12px}
+.varcard .kv{background:var(--soft);border-radius:11px;padding:9px 11px;font-size:12.5px;flex:1;text-align:center}
+.varcard .kv b{display:block;font-size:10.5px;color:var(--muted);font-weight:600;margin-bottom:3px}
+.varcard .watch{font-size:12px;color:var(--crimson-deep);margin-top:11px;background:var(--soft);border-radius:10px;padding:9px 11px}
+/* calc */
+.calc{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px}
+.calc .fld{margin-bottom:13px}
+.calc label{font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:6px}
+.calc input[type=number]{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:15px;font-family:inherit;background:#FFF8FA;color:var(--ink);outline:none}
+.calc input:focus{border-color:var(--crimson)}
+.seg{display:flex;background:var(--soft);border-radius:11px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:none;padding:9px;border-radius:9px;font-size:13px;font-weight:600;color:var(--muted);font-family:inherit;cursor:pointer}
+.seg button.on{background:#fff;color:var(--crimson);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.two{display:flex;gap:10px}.two .fld{flex:1}
+.calcbtn{width:100%;background:var(--crimson);color:#fff;border:0;border-radius:12px;padding:14px;font-size:15px;font-weight:700;font-family:inherit;cursor:pointer;margin-top:2px}
+.calcbtn:active{transform:scale(.99)}
+.out{margin-top:16px;display:none}
+.out.show{display:block}
+.tank{background:var(--soft);border-radius:13px;padding:14px 15px;margin-bottom:10px}
+.tank .th{font-size:13px;font-weight:700;color:var(--crimson-deep);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.tank .th .b{width:20px;height:20px;border-radius:6px;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:700}
+.tank .li{display:flex;justify-content:space-between;font-size:13.5px;padding:4px 0}
+.tank .li b{font-weight:700}
+.ecline{font-size:12.5px;color:var(--muted);margin:2px 0 12px}
+.calc .ctitle{font-size:14px;font-weight:700;margin-bottom:11px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.calc .ctitle .tt,.calc .ctitle .mini{font-weight:600}
+.calc .tt{font-size:11px;color:var(--muted)}
+.mini{font-size:11px;font-weight:700;color:var(--crimson);background:var(--soft);border:0;border-radius:20px;padding:5px 11px;cursor:pointer;font-family:inherit}
+.io4{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.io{display:flex;flex-direction:column}
+.io label{font-size:11px;color:var(--muted);font-weight:600;margin-bottom:4px}
+.io .ib{display:flex;align-items:center;background:#FFF8FA;border:1px solid var(--line);border-radius:10px;padding:0 10px}
+.io .ib:focus-within{border-color:var(--crimson)}
+.io input{border:0;outline:0;background:transparent;font-size:14.5px;font-family:inherit;color:var(--ink);width:100%;padding:9px 0}
+.io .u{font-size:10.5px;color:var(--muted);flex:none;margin-left:4px}
+.savebtn{width:100%;background:var(--leaf);color:#fff;border:0;border-radius:11px;padding:11px;font-size:14px;font-weight:700;font-family:inherit;cursor:pointer}
+.recitem{display:flex;align-items:center;gap:10px;background:var(--soft);border-radius:11px;padding:10px 13px;margin-top:9px}
+.recitem .rn{flex:1;min-width:0}
+.recitem .rn b{font-size:13.5px;display:block}
+.recitem .rn small{font-size:11px;color:var(--muted)}
+.recitem button{border:0;border-radius:8px;padding:7px 11px;font-size:12px;font-weight:700;font-family:inherit;cursor:pointer}
+.recitem .ld{background:var(--crimson);color:#fff}
+.recitem .dl{background:var(--line);color:var(--ink)}
+.expwrap{margin-top:12px}
+.expwrap textarea{width:100%;height:76px;margin-top:9px;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:11px;font-family:monospace;background:#FFF8FA;display:none;resize:vertical}
+.cmp{width:100%;border-collapse:collapse;margin-bottom:12px;background:var(--soft);border-radius:12px;overflow:hidden}
+.cmp th,.cmp td{padding:8px 10px;font-size:12.5px;text-align:right;border-top:1px solid var(--line)}
+.cmp th{background:var(--soft);color:var(--crimson-deep);font-weight:700;font-size:11px;border:0}
+.cmp td:first-child,.cmp th:first-child{text-align:left}
+.cmp .need b{color:var(--crimson)}
+.cmp .ok{color:var(--leaf);font-weight:700}
+.yt{margin-bottom:14px;display:block;text-decoration:none;color:inherit}
+.ytthumb{position:relative;width:100%;padding-bottom:56.25%;border-radius:16px;overflow:hidden;cursor:pointer;background:linear-gradient(140deg,#F890AB,#E24A6E);box-shadow:var(--shadow)}
+.ytthumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ytthumb .ytplay{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:56px;height:56px;border-radius:50%;background:rgba(226,74,110,.92);display:grid;place-items:center;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.ytthumb .ytplay svg{width:24px;height:24px;color:#fff;margin-left:3px}
+.ytframe{position:relative;width:100%;padding-bottom:56.25%;border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+.ytframe iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.ytcap{font-size:13.5px;font-weight:700;margin-top:9px;letter-spacing:-.01em;display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.ytcap small{display:block;font-size:11.5px;color:var(--muted);font-weight:600;margin-top:1px}
+.ytopen{flex:none;font-size:11.5px;font-weight:700;color:#fff;background:var(--crimson);padding:6px 12px;border-radius:20px;white-space:nowrap}
+.aibox{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow)}
+.aihead{font-size:16px;font-weight:700;margin-bottom:4px}
+.aidesc{font-size:13px;color:var(--muted);margin-bottom:14px}
+.diagbtn{display:flex;align-items:center;gap:13px;background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:15px 16px;margin-bottom:11px;text-decoration:none;color:inherit}
+.diagbtn:active{transform:scale(.98)}
+.diagbtn .dg-ic{font-size:24px;flex:none}
+.diagbtn .dg-tx{flex:1;min-width:0}
+.diagbtn .dg-tx b{display:block;font-size:15px;font-weight:700}
+.diagbtn .dg-tx small{font-size:11.5px;color:var(--muted)}
+.diagbtn .dg-ar{color:var(--crimson);font-weight:700;flex:none}
+.itembtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.itembtns a{font-size:12px;font-weight:700;color:var(--crimson);background:var(--soft);border:1px solid var(--line);border-radius:20px;padding:7px 12px;text-decoration:none}
+.webbar{background:var(--soft);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:14px 0 4px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.webbar .wl{font-size:12px;font-weight:700;color:var(--muted);width:100%}
+.webbar a{font-size:12.5px;font-weight:700;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:20px;padding:8px 13px;text-decoration:none}
+.dogseg{margin-bottom:18px}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;z-index:50;padding:8px 4px calc(8px + env(safe-area-inset-bottom))}
+.nav button{flex:1;background:none;border:0;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:var(--muted);font-family:inherit;font-weight:600;padding:4px 0}
+.nav button svg{width:22px;height:22px}
+.nav button.on{color:var(--crimson)}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <svg class="mark" viewBox="0 0 32 32" fill="none"><path d="M6 13c0 7 5.2 13 10 13s10-6 10-13c0-3.4-2.6-5.6-5.6-5.6-1.7 0-3.3.8-4.4 2-1.1-1.2-2.7-2-4.4-2C8.6 7.4 6 9.6 6 13Z" fill="#B31E36"/><path d="M16 8.4c.6-2 2.2-3.6 4.4-4-1.4 1-2 2.4-2 4M16 8.4c-.6-2-2.2-3.6-4.4-4 1.4 1 2 2.4 2 4" stroke="#2F6B41" stroke-width="1.6" stroke-linecap="round"/><g fill="#E4A93C"><circle cx="12" cy="14" r="1"/><circle cx="16" cy="13" r="1"/><circle cx="20" cy="14" r="1"/><circle cx="14" cy="17.5" r="1"/><circle cx="18" cy="17.5" r="1"/><circle cx="16" cy="21" r="1"/></g></svg>
+    <h1 class="serif">딸기백과</h1><span class="sub" id="curVar">설향 기준</span>
+  </div>
+
+  <!-- HOME -->
+  <section class="view active" id="home">
+    <div class="hero">
+      <svg class="big" viewBox="0 0 32 32" fill="none"><path d="M6 13c0 7 5.2 13 10 13s10-6 10-13c0-3.4-2.6-5.6-5.6-5.6-1.7 0-3.3.8-4.4 2-1.1-1.2-2.7-2-4.4-2C8.6 7.4 6 9.6 6 13Z" fill="#fff"/><g fill="#B31E36" opacity=".5"><circle cx="12" cy="14" r="1"/><circle cx="16" cy="13" r="1"/><circle cx="20" cy="14" r="1"/><circle cx="14" cy="17.5" r="1"/><circle cx="18" cy="17.5" r="1"/><circle cx="16" cy="21" r="1"/></g></svg>
+      <div class="kick">STRAWBERRY ENCYCLOPEDIA</div>
+      <h2 class="serif">한 손에 담은<br>딸기 농사의 모든 것</h2>
+      <p>품종·생육·양액 레시피·병해충·생리장해까지, 설향에 맞춰서.</p>
+    </div>
+    <div class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="q" placeholder="무엇이든 검색 (예: 팁번, EC, 설향, 마그마)">
+      <svg class="clr" id="clr" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </div>
+    <div id="results" style="display:none"></div>
+    <div id="homeMain">
+      <div class="eyebrow">카테고리</div>
+      <div class="grid">
+        <button class="cat" onclick="go('grow')"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#2F6B41" stroke-width="1.8"><path d="M12 22V12"/><path d="M12 12C12 8 9 6 5 6c0 4 3 6 7 6Z" fill="#5C9A6B" fill-opacity=".2"/><path d="M12 12c0-4 3-7 7-7 0 4-3 7-7 7Z" fill="#5C9A6B" fill-opacity=".2"/></svg><b>생육 관리</b><span>생육단계·온도·관수 관리</span></button>
+        <button class="cat" onclick="go('mach')"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#B31E36" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg><b>양액·기계</b><span>양액 레시피 계산기·마그마</span></button>
+        <button class="cat" onclick="go('dogam')"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#E24A6E" stroke-width="1.8"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H20v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M20 18H6.5A1.5 1.5 0 0 0 5 19.5"/></svg><b>딸기 도감</b><span>품종·생리장해·병해충 도감</span></button>
+        <button class="cat" onclick="go('video')"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="#B31E36" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3z" fill="#B31E36"/></svg><b>영상 자료</b><span>농사로·농진청·마그마 현장 영상</span></button>
+      </div>
+      <div class="month-card">
+        <div class="now"><b class="serif" id="mLabel">이달의 작업</b><span class="tag">촉성재배 기준</span></div>
+        <ul class="tasklist" id="mTasks"></ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- GROW -->
+  <section class="view" id="grow">
+    <div class="eyebrow">생육</div>
+    <div class="h-title serif">생육 관리</div>
+    <div class="h-desc">촉성재배(9월 정식) 기준. 품종은 도감 탭에서 선택해요.</div>
+    <div class="eyebrow" style="margin-top:6px">생육 단계</div>
+    <div class="timeline" id="stages"></div>
+    <div class="eyebrow">정식 후 관리 핵심</div>
+    <div class="stack" id="planting" style="margin-bottom:22px"></div>
+    <div class="eyebrow">온도 관리 기준</div>
+    <div class="dtable"><div class="cap">시기별 목표 온도 (℃)</div><table><tbody id="tempTable"></tbody></table></div>
+    <div class="note" id="varTempNote"></div>
+    <div class="eyebrow">관수 관리</div>
+    <div class="stack" id="water"></div>
+  </section>
+
+  <!-- DOGAM -->
+  <section class="view" id="dogam">
+    <div class="eyebrow">딸기 도감</div>
+    <div class="h-title serif">딸기 도감</div>
+    <div class="h-desc">품종·생리장해·병해충을 도감으로 모았어요.</div>
+    <div class="seg dogseg">
+      <button id="dg_var" class="on" onclick="dogTab('var')">품종</button>
+      <button id="dg_dis" onclick="dogTab('dis')">생리장해</button>
+      <button id="dg_pest" onclick="dogTab('pest')">병해충</button>
+      <button id="dg_ai" onclick="dogTab('ai')">AI진단</button>
+    </div>
+    <div class="dogsec" id="dogVar">
+      <div class="chips" id="varChips"></div>
+      <div class="varcard" id="varCard"></div>
+    </div>
+    <div class="dogsec" id="dogDis" style="display:none">
+      <div class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input id="qd" placeholder="생리장해 검색 (예: 팁번, 기형과)"></div>
+      <div class="stack" id="disorders"></div>
+      <div id="disWeb"></div>
+    </div>
+    <div class="dogsec" id="dogPest" style="display:none">
+      <div class="search"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><input id="qp" placeholder="병·해충 이름 또는 증상 검색"></div>
+      <div class="eyebrow" id="ebD">병해 (곰팡이·세균)</div>
+      <div class="stack" id="diseases" style="margin-bottom:22px"></div>
+      <div class="eyebrow" id="ebP">해충</div>
+      <div class="stack" id="pests"></div>
+      <div class="empty" id="noResult" style="display:none">검색 결과가 없어요.</div>
+      <div id="pestWeb"></div>
+    </div>
+    <div class="dogsec" id="dogAi" style="display:none">
+      <div class="aibox">
+        <div class="aihead">📷 사진으로 병해 진단</div>
+        <p class="aidesc">딸기 사진을 촬영·저장한 뒤 아래 서비스에 올리면 AI가 병해충·생리장해를 진단해줘요.</p>
+        <a class="diagbtn" href="https://lens.google.com" target="_blank" rel="noopener"><span class="dg-ic">🔍</span><span class="dg-tx"><b>구글 렌즈</b><small>사진으로 바로 검색·유사 병해 찾기</small></span><span class="dg-ar">↗</span></a>
+        <a class="diagbtn" href="https://gemini.google.com" target="_blank" rel="noopener"><span class="dg-ic">✨</span><span class="dg-tx"><b>제미나이 (Gemini)</b><small>사진 올리고 "딸기 병해 진단해줘"</small></span><span class="dg-ar">↗</span></a>
+        <div class="note" style="margin:14px 0 0">⚠ 진단은 <b>참고용</b>이에요. 약제 살포 전 반드시 농업기술센터·전문가 확인을 받으세요.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MACHINE -->
+  <section class="view" id="mach">
+    <div class="eyebrow">양액 레시피</div>
+    <div class="h-title serif">원수 기반 양액 계산기</div>
+    <div class="h-desc">받은 원수(수질) 분석표를 넣으면, 목표 대비 <b>부족분만큼</b> 넣을 비료량을 계산해줘요.</div>
+
+    <div class="calc">
+      <div class="ctitle">① 원수 분석표 입력 <button class="mini" onclick="loadSampleWater()">예시 원수</button></div>
+      <div class="io4" id="waterInputs"></div>
+      <div class="ctitle" style="margin-top:16px">② 목표 레시피 (ppm) <span class="tt">설향 기준 · 수정 가능</span></div>
+      <div class="io4" id="targetInputs"></div>
+      <div class="ctitle" style="margin-top:16px">③ 물량 · 방식</div>
+      <div class="fld"><div class="seg"><button id="mDirect" class="on" onclick="setMode('direct')">직접 급액</button><button id="mStock" onclick="setMode('stock')">원액(농축)</button></div></div>
+      <div class="two">
+        <div class="fld"><label id="volLabel">총 급액량 (L)</label><input type="number" id="cVol" value="1000"></div>
+        <div class="fld" id="concFld" style="display:none"><label>농축배수 (배)</label><input type="number" id="cConc" value="100"></div>
+      </div>
+      <button class="calcbtn" onclick="calc()">양액 계산하기</button>
+      <div class="out" id="cOut"></div>
+    </div>
+
+    <div class="calc">
+      <div class="ctitle">④ 내 레시피 저장</div>
+      <div class="two"><div class="fld" style="flex:2"><label>레시피 이름</label><input type="text" id="recName" placeholder="예: 설향 12월 원수A"></div><div class="fld" style="flex:1;display:flex;align-items:flex-end"><button class="savebtn" onclick="saveRecipe()">저장</button></div></div>
+      <div id="recList"></div>
+      <div class="expwrap"><button class="mini" onclick="toggleExport()">내보내기 / 불러오기 (백업)</button><textarea id="expBox" placeholder="여기 내용을 복사해두면 백업돼요. 붙여넣고 '불러오기'를 누르면 복원됩니다."></textarea><button class="mini" id="impBtn" onclick="importRecipes()" style="display:none">붙여넣은 내용 불러오기</button></div>
+    </div>
+
+    <div class="note"><b>안전 수칙</b> · A·B 원액은 각각 따로 녹여 별도 탱크에 보관하세요. 칼슘(A)과 인산·황산(B)을 원액상태로 섞으면 침전됩니다. 계산값은 시작점이니 EC·pH미터로 최종 확인하세요.</div>
+
+    <div class="eyebrow">양액 관리 기준</div>
+    <div class="dtable"><div class="cap">EC · pH · 배액 기준</div><table><tbody id="nutTable"></tbody></table></div>
+    <div class="note" id="varEcNote"></div>
+
+    <div class="eyebrow">장비 · 마그마</div>
+    <div class="machine"><span class="badge" style="background:var(--crimson)">자동양액공급기</span><h3 class="serif">마그마 (MAGMA)</h3><div class="model">MAGMA-1000 V2.0 · 그린씨에스</div><ul><li>원수·원액을 정밀 혼합해 목표 EC·pH로 자동 급액</li><li>구간별 급액 스케줄·일사 비례 관수 설정</li><li>배액 재활용 시스템과 연동 가능</li><li>급액량·EC·pH 데이터 기록 및 모니터링</li></ul><div class="brand">제조 · 그린씨에스(주) — 복합환경제어·양액공급기 점유율 선두</div></div>
+    <div class="machine"><span class="badge" style="background:var(--leaf)">복합환경제어</span><h3 class="serif">마그마플러스 (MAGMAPLUS)</h3><div class="model">MAGMAPLUS-1000 · 그린씨에스</div><ul><li>천창·측창·보온커튼 등 구동기 자동 개폐 제어</li><li>근권부·지상부·외부 기상 센서값 실시간 모니터링</li><li>PC·모바일 원격 제어 및 상황 시각화(그래프)</li><li>양액공급기·배액 재활용 시스템 연동</li></ul><div class="brand">제조 · 그린씨에스(주) — 전국 약 4,500농가 보급</div></div>
+    <div class="eyebrow">마그마플러스 사용설명서</div>
+    <div class="h-desc" style="margin-bottom:12px">MAGMA+ 복합환경제어 시스템 설정 요약. 항목을 눌러 펼쳐보세요.</div>
+    <div class="stack" id="magManual"></div>
+    <div class="brand" style="margin-top:12px">그린씨에스(주) · 기술문의 062-385-3030 · www.gcsmagma.com</div>
+  </section>
+
+
+  <!-- VIDEO -->
+  <section class="view" id="video">
+    <div class="eyebrow">영상</div>
+    <div class="h-title serif">영상 자료실</div>
+    <div class="h-desc">썸네일을 누르면 앱 안에서 바로 재생돼요.</div>
+    <div class="eyebrow" style="margin-top:6px">딸기 농사 영상</div><div id="ytPlayers"></div>
+    <div class="eyebrow">재배 기술 (공식자료)</div><div id="vidGrow"></div>
+    <div class="eyebrow">장비 · 마그마</div><div id="vidMach"></div>
+  </section>
+
+  <nav class="nav" id="nav">
+    <button data-t="home" class="on" onclick="go('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/></svg>홈</button>
+    <button data-t="grow" onclick="go('grow')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M12 21V11"/><path d="M12 11C12 7 9 5 5 5c0 4 3 6 7 6Z"/><path d="M12 11c0-4 3-6 7-6 0 4-3 6-7 6Z"/></svg>생육</button>
+    <button data-t="dogam" onclick="go('dogam')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H20v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M20 18H6.5A1.5 1.5 0 0 0 5 19.5v0A1.5 1.5 0 0 0 6.5 21H20z"/></svg>도감</button>
+    <button data-t="mach" onclick="go('mach')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg>양액·기계</button>
+    <button data-t="video" onclick="go('video')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m10 9 5 3-5 3z"/></svg>영상</button>
+  </nav>
+</div>
+
+<script>
+function leaf(f,v){return `<path d="M32 7C18 11 11 24 11 38c0 8 6 13 13 13 14-4 21-18 21-33 0-7-6-11-13-11Z" fill="${f}"/><path d="M31 13c-2 12-7 24-15 33" stroke="${v}" stroke-width="2" fill="none" stroke-linecap="round"/>`}
+function berry(body,tip){return `<path d="M18 28c0 13 8 24 14 24s14-11 14-24c0-6-5-10-9-10-2 0-4 1-5 2-1-1-3-2-5-2-4 0-9 4-9 10Z" fill="${body}"/>`+(tip?`<path d="M24 46c2 4 5 6 8 6s6-2 8-6c-5 2-11 2-16 0Z" fill="${tip}"/>`:'')+`<path d="M27 16c-1-4 2-8 5-9-2 2-3 5-1 7M32 14c1-4 4-6 8-6-2 3-4 5-4 7" stroke="#2F6B41" stroke-width="2.2" fill="none" stroke-linecap="round"/><g fill="#F4C95B"><circle cx="26" cy="30" r="1.2"/><circle cx="33" cy="29" r="1.2"/><circle cx="38" cy="33" r="1.2"/><circle cx="29" cy="37" r="1.2"/><circle cx="35" cy="39" r="1.2"/><circle cx="24" cy="38" r="1.2"/></g>`}
+const ART={
+'탄저병':`<svg viewBox="0 0 64 64">${leaf('#4E8B5F','#2F6B41')}<g fill="#5A3016"><circle cx="26" cy="28" r="4"/><circle cx="34" cy="36" r="5.5"/><circle cx="22" cy="40" r="3"/><circle cx="30" cy="22" r="2.5"/></g><circle cx="34" cy="36" r="2" fill="#C6621F"/></svg>`,
+'시들음병':`<svg viewBox="0 0 64 64"><path d="M32 54V30" stroke="#7A5A2B" stroke-width="3" stroke-linecap="round"/><path d="M32 32c-8-2-16 2-20 10 8 3 16-1 20-6Z" fill="#B39A4A"/><path d="M32 26c7-3 15 0 19 8-8 2-15-2-19-6Z" fill="#4E8B5F"/><path d="M32 20c-5-2-10 0-13 6 6 2 11-1 13-4Z" fill="#C9AE55"/></svg>`,
+'흰가루병':`<svg viewBox="0 0 64 64">${leaf('#4E8B5F','#2F6B41')}<g fill="#FDFBF5" opacity=".92"><circle cx="24" cy="26" r="3"/><circle cx="31" cy="30" r="4"/><circle cx="27" cy="36" r="3.4"/><circle cx="34" cy="24" r="2.6"/><circle cx="21" cy="34" r="2.4"/><circle cx="35" cy="34" r="2.8"/><circle cx="29" cy="42" r="2.6"/></g></svg>`,
+'잿빛곰팡이병':`<svg viewBox="0 0 64 64">${berry('#C42A3D',null)}<g fill="#B8AFA6" opacity=".95"><circle cx="26" cy="34" r="4"/><circle cx="34" cy="38" r="5"/><circle cx="30" cy="44" r="4"/><circle cx="38" cy="32" r="3"/></g></svg>`,
+'꽃마름병':`<svg viewBox="0 0 64 64"><g fill="#B39A4A"><ellipse cx="32" cy="22" rx="7" ry="9"/><ellipse cx="20" cy="30" rx="8" ry="6" transform="rotate(-35 20 30)"/><ellipse cx="44" cy="30" rx="8" ry="6" transform="rotate(35 44 30)"/><ellipse cx="24" cy="42" rx="7" ry="6" transform="rotate(30 24 42)"/><ellipse cx="40" cy="42" rx="7" ry="6" transform="rotate(-30 40 42)"/></g><circle cx="32" cy="33" r="6" fill="#7A5A2B"/><path d="M32 39v10" stroke="#4E8B5F" stroke-width="3" stroke-linecap="round"/></svg>`,
+'총채벌레':`<svg viewBox="0 0 64 64"><g fill="#F1D98E"><ellipse cx="20" cy="26" rx="9" ry="7"/><ellipse cx="44" cy="30" rx="9" ry="7"/></g><ellipse cx="30" cy="40" rx="16" ry="5" transform="rotate(20 30 40)" fill="#6B4A22"/><g stroke="#4A3016" stroke-width="1.6"><path d="M40 38l9-4M42 42l9 0M38 45l7 4"/></g><circle cx="20" cy="49" r="2.4" fill="#3A2612"/></svg>`,
+'점박이응애':`<svg viewBox="0 0 64 64">${leaf('#5C9A6B','#3E7D4F')}<ellipse cx="30" cy="32" rx="8" ry="6.5" fill="#C46A2A"/><circle cx="27" cy="30" r="1.8" fill="#3A2010"/><circle cx="33" cy="30" r="1.8" fill="#3A2010"/><g stroke="#7A4520" stroke-width="1.4"><path d="M22 28l-5-3M22 34l-5 2M38 28l5-3M38 34l5 2"/></g></svg>`,
+'진딧물':`<svg viewBox="0 0 64 64"><path d="M32 54V16" stroke="#4E8B5F" stroke-width="3" stroke-linecap="round"/><g fill="#7FB77E" stroke="#4E8B5F" stroke-width="1"><ellipse cx="24" cy="24" rx="5" ry="6"/><ellipse cx="40" cy="28" rx="5" ry="6"/><ellipse cx="23" cy="36" rx="5" ry="6"/><ellipse cx="41" cy="40" rx="4.5" ry="5.5"/><ellipse cx="32" cy="20" rx="4.5" ry="5.5"/></g></svg>`,
+'온실가루이':`<svg viewBox="0 0 64 64">${leaf('#4E8B5F','#2F6B41')}<g><ellipse cx="26" cy="28" rx="7" ry="4.5" fill="#FCFAF3" opacity=".95"/><ellipse cx="36" cy="36" rx="7" ry="4.5" fill="#FCFAF3" opacity=".95"/><ellipse cx="24" cy="40" rx="6" ry="4" fill="#FCFAF3" opacity=".95"/><circle cx="26" cy="28" r="1.6" fill="#C9B24A"/><circle cx="36" cy="36" r="1.6" fill="#C9B24A"/></g></svg>`,
+'잎선충':`<svg viewBox="0 0 64 64">${leaf('#4E8B5F','#2F6B41')}<path d="M20 24c6 0 6 6 12 6s6-6 12-6" stroke="#3A2612" stroke-width="2.4" fill="none" stroke-linecap="round"/><g fill="#5A3016" opacity=".85"><path d="M22 34c4 1 6 5 3 9-4-1-6-5-3-9Z"/><path d="M34 30c4 1 6 5 3 9-4-1-6-5-3-9Z"/></g></svg>`,
+'s_seed':`<svg viewBox="0 0 64 64"><rect x="8" y="42" width="18" height="12" rx="2" fill="#B07A4A"/><path d="M17 42c0-8 3-14 0-20" stroke="#4E8B5F" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M17 30c-6-2-10-6-9-12 6 0 10 4 9 12Z" fill="#5C9A6B"/><path d="M17 26c5-2 9-5 8-11-5 0-9 4-8 11Z" fill="#6BA368"/><path d="M26 48h24" stroke="#C9AE55" stroke-width="2.5" stroke-dasharray="1 5" stroke-linecap="round"/><circle cx="50" cy="48" r="6" fill="#7FB77E"/><path d="M50 48v-6" stroke="#4E8B5F" stroke-width="2"/></svg>`,
+'s_bud':`<svg viewBox="0 0 64 64"><path d="M32 54V32" stroke="#4E8B5F" stroke-width="3.5" stroke-linecap="round"/><path d="M32 40c-8-1-13-6-13-13 8 0 13 5 13 13Z" fill="#5C9A6B"/><path d="M32 40c8-1 13-6 13-13-8 0-13 5-13 13Z" fill="#6BA368"/><path d="M32 30c-4 0-6-3-6-8 0-4 3-8 6-8s6 4 6 8c0 5-2 8-6 8Z" fill="#EBD98C"/><ellipse cx="32" cy="16" rx="4" ry="3" fill="#FBF5EC"/></svg>`,
+'s_plant':`<svg viewBox="0 0 64 64"><path d="M10 46h44l-4 8H14z" fill="#8B5E3C"/><path d="M32 44V28" stroke="#3E7D4F" stroke-width="3.5" stroke-linecap="round"/><path d="M32 34c-9-1-15-7-15-15 9 0 15 6 15 15Z" fill="#5C9A6B"/><path d="M32 34c9-1 15-7 15-15-9 0-15 6-15 15Z" fill="#6BA368"/><path d="M32 26c-5-1-8-4-8-9 5 0 8 3 8 9Z" fill="#4E8B5F"/></svg>`,
+'s_flower':`<svg viewBox="0 0 64 64"><path d="M28 54V34" stroke="#4E8B5F" stroke-width="3" stroke-linecap="round"/><g fill="#fff" stroke="#EADFCF" stroke-width="1"><ellipse cx="28" cy="22" rx="6" ry="8"/><ellipse cx="16" cy="28" rx="8" ry="6" transform="rotate(-40 16 28)"/><ellipse cx="40" cy="28" rx="8" ry="6" transform="rotate(40 40 28)"/><ellipse cx="21" cy="38" rx="7" ry="5.5" transform="rotate(35 21 38)"/><ellipse cx="35" cy="38" rx="7" ry="5.5" transform="rotate(-35 35 38)"/></g><circle cx="28" cy="30" r="6" fill="#E4A93C"/><g fill="#6B4A22"><ellipse cx="48" cy="16" rx="6" ry="4"/></g><rect x="45" y="13" width="6" height="6" fill="#E4A93C" transform="rotate(12 48 16)"/></svg>`,
+'s_fruit':`<svg viewBox="0 0 64 64">${berry('#C42A3D',null)}</svg>`,
+'팁번':`<svg viewBox="0 0 64 64">${leaf('#5C9A6B','#3E7D4F')}<path d="M32 7c-7 2-12 6-15 12 5 2 11 1 15-3 3-3 3-6 0-9Z" fill="#9A6A34"/><path d="M13 34c3 3 7 4 11 3-4-1-7-4-8-8-2 1-3 3-3 5Z" fill="#B08A4E" opacity=".8"/></svg>`,
+'기형과':`<svg viewBox="0 0 64 64"><path d="M18 30c-2 12 6 24 14 24 4 0 9-4 12-11 2 4 6 4 8 1 2-4-1-11-5-12 2-5-2-10-7-10-2 0-4 1-5 2-2-2-5-3-8-1-3 1-4 4-4 8-3 0-6 3-8 9Z" fill="#C42A3D"/><path d="M27 16c-1-4 2-8 5-9-2 2-3 5-1 7" stroke="#2F6B41" stroke-width="2.2" fill="none" stroke-linecap="round"/><g fill="#F4C95B"><circle cx="26" cy="32" r="1.2"/><circle cx="34" cy="30" r="1.2"/><circle cx="40" cy="34" r="1.2"/><circle cx="30" cy="40" r="1.2"/></g></svg>`,
+'선청과':`<svg viewBox="0 0 64 64">${berry('#C42A3D','#B7CE92')}</svg>`,
+'급성위조':`<svg viewBox="0 0 64 64"><path d="M32 54V30" stroke="#6E5A3A" stroke-width="3" stroke-linecap="round"/><path d="M32 34c-9 0-16 4-19 12 8 2 16-3 19-9Z" fill="#8A7A48"/><path d="M32 30c8-3 15 1 18 9-8 1-15-3-18-7Z" fill="#5C7A45"/></svg>`,
+'백랍과':`<svg viewBox="0 0 64 64">${berry('#C42A3D','#F1E7DA')}</svg>`,
+'왜화현상':`<svg viewBox="0 0 64 64"><rect x="16" y="46" width="32" height="9" rx="2" fill="#B07A4A"/><path d="M32 46V36" stroke="#4E8B5F" stroke-width="3"/><path d="M32 40c-5-1-8-4-8-8 5 0 8 3 8 8Z" fill="#6BA368"/><path d="M32 40c5-1 8-4 8-8-5 0-8 3-8 8Z" fill="#5C9A6B"/><path d="M12 30h8M44 30h8M14 22l6 4M50 22l-6 4" stroke="#C9AE55" stroke-width="2" stroke-linecap="round"/></svg>`
+};
+function thumb(k,f){return `<span class="thumb">${ART[k]||''}<img src="photos/${f}.jpg" alt="" onerror="this.remove()"></span>`}
+function pic(k,f){return `<span class="pic">${ART[k]||''}<img src="photos/${f}.jpg" alt="" onerror="this.remove()"></span>`}
+function go(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===id));window.scrollTo(0,0);}
+function dogTab(t){['var','dis','pest','ai'].forEach(k=>{var b=document.getElementById('dg_'+k);var sec=document.getElementById('dog'+k.charAt(0).toUpperCase()+k.slice(1));if(b)b.classList.toggle('on',k===t);if(sec)sec.style.display=k===t?'block':'none';});}
+function enc(q){return encodeURIComponent(q);}
+function webBar(q){q=(q||'').trim();var s2=q||'딸기';return `<div class="webbar"><span class="wl">🔎 웹에서 더 찾기 · "${s2}"</span>`+
+`<a href="https://www.google.com/search?tbm=isch&q=${enc('딸기 '+s2)}" target="_blank" rel="noopener">🖼 구글 이미지</a>`+
+`<a href="https://www.google.com/search?q=${enc(s2)}" target="_blank" rel="noopener">🔍 구글</a>`+
+`<a href="https://www.youtube.com/results?search_query=${enc('딸기 '+s2)}" target="_blank" rel="noopener">▶ 유튜브</a>`+
+`<a href="https://search.naver.com/search.naver?query=${enc('딸기 '+s2)}" target="_blank" rel="noopener">🟢 네이버</a>`+
+`<a href="https://www.perplexity.ai/search?q=${enc('딸기 '+s2)}" target="_blank" rel="noopener">✨ AI</a></div>`;}
+function itemBtns(name){var q=enc('딸기 '+name);return `<div class="itembtns"><a href="https://www.google.com/search?tbm=isch&q=${q}" target="_blank" rel="noopener">🖼 사진 검색</a><a href="https://www.google.com/search?q=${q}" target="_blank" rel="noopener">🔍 웹</a><a href="https://www.youtube.com/results?search_query=${q}" target="_blank" rel="noopener">▶ 영상</a></div>`;}
+function toggleAcc(el){const a=el.parentElement;a.classList.toggle('open');const b=a.querySelector('.acc-body');b.style.maxHeight=a.classList.contains('open')?b.scrollHeight+'px':0;}
+function accHTML(title,sub,color,body,thumbHtml){const left=thumbHtml||`<span class="dot" style="background:${color}"></span>`;return `<div class="acc"><div class="acc-head" onclick="toggleAcc(this)">${left}<div class="t"><b>${title}</b><small>${sub}</small></div><svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg></div><div class="acc-body"><div class="acc-inner">${body}</div></div></div>`;}
+
+/* ===== Varieties ===== */
+const VARS={
+seolhyang:{name:'설향',sc:'국내 1위 촉성품종',ec:{a:'0.8',b:'1.0~1.2',c:'1.2~1.4'},ecCalc:1.1,tn:'8~10',tf:'6~8',
+ tr:'논산에서 육성된 국내 대표 촉성 품종. 저온·저일조 적응성이 뛰어나고 연속 출뢰성이 좋아 수량이 안정적입니다. 과실은 대과·원추형이며 당도가 양호합니다.',
+ watch:'흰가루병에 다소 약한 편 — 환기·습도 관리 중요. 육묘기 탄저병·시들음병, 응애 주의.'},
+kingsberry:{name:'킹스베리',sc:'초대형·향 특화',ec:{a:'0.9',b:'1.0~1.3',c:'1.2~1.5'},ecCalc:1.2,tn:'8~10',tf:'6~8',
+ tr:'국내 육성 초대형 품종. 복숭아향과 큰 과가 특징이고 초세가 강건합니다. 저온 요구가 커 화아분화가 다소 늦으니 저온 처리·정식 시기 관리가 중요합니다.',
+ watch:'과가 커 잿빛곰팡이·기형과 관리 필요. 흰가루병 주의, 초세 강해 EC 다소 높게.'},
+jukhyang:{name:'죽향',sc:'고당도·고경도',ec:{a:'0.8',b:'1.0~1.2',c:'1.2~1.4'},ecCalc:1.0,tn:'8~10',tf:'6~8',
+ tr:'담양 육성. 당도가 높고 과육이 단단해 유통·수출에 유리합니다. 식미가 우수합니다.',
+ watch:'흰가루병에 비교적 강한 편이나 응애·총채벌레 예찰 필요.'},
+maehyang:{name:'매향',sc:'수출·저장성',ec:{a:'0.9',b:'1.0~1.3',c:'1.2~1.5'},ecCalc:1.15,tn:'8~10',tf:'6~8',
+ tr:'경도가 매우 높아 저장·수출에 강한 품종. 저온신장성이 좋습니다. 신맛이 있는 편입니다.',
+ watch:'흰가루병에 약한 편 — 예방 방제 철저. 저온기 관리 유리.'},
+geumsil:{name:'금실',sc:'고당도·균형',ec:{a:'0.8',b:'1.0~1.2',c:'1.2~1.4'},ecCalc:1.0,tn:'8~10',tf:'6~8',
+ tr:'경남 육성. 당도가 높고 산미와 균형이 좋습니다. 초세는 중간 정도입니다.',
+ watch:'흰가루병에 비교적 강. 초세·착과 균형 관리.'},
+arihyang:{name:'아리향',sc:'대과·향 우수',ec:{a:'0.9',b:'1.0~1.3',c:'1.2~1.5'},ecCalc:1.15,tn:'8~10',tf:'6~8',
+ tr:'국내 육성 대과 품종. 향과 식미가 우수하고 경도도 양호합니다. 초세가 강한 편입니다.',
+ watch:'탄저병 주의(육묘기). 초세 강해 과다착과·초세관리 유의.'}};
+let curVar='seolhyang';
+function renderChips(){document.getElementById('varChips').innerHTML=Object.keys(VARS).map(k=>`<button class="chip ${k===curVar?'on':''}" onclick="selectVar('${k}')">${VARS[k].name}</button>`).join('');}
+function selectVar(k){curVar=k;const v=VARS[k];
+ document.getElementById('curVar').textContent=v.name+' 기준';
+ renderChips();
+ document.getElementById('varCard').innerHTML=`<div class="vh"><h3 class="serif">${v.name}</h3><span class="vtag">${k==='seolhyang'?'내 품종':'품종'}</span></div><div class="sc">${v.sc}</div><p class="tr">${v.tr}</p><div class="row"><div class="kv"><b>활착기 EC</b>${v.ec.a}</div><div class="kv"><b>생육기 EC</b>${v.ec.b}</div><div class="kv"><b>저온·비대기</b>${v.ec.c}</div></div><div class="watch">⚠ ${v.watch}</div>`;
+ document.getElementById('varTempNote').innerHTML=`<b>${v.name} 기준</b> — 개화·수정기 야간 ${v.tn}℃, 비대·수확기 야간 ${v.tf}℃로 안정 관리하세요. 크라운(관부) 온도와 급격한 변화 회피가 핵심입니다.`;
+ document.getElementById('varEcNote').innerHTML=`<b>${v.name} 권장 EC</b> — 활착 ${v.ec.a} / 생육 ${v.ec.b} / 저온·비대기 ${v.ec.c} dS/m. 반드시 원수 분석 후 보정하세요.`;
+ if(document.getElementById('targetInputs'))fillTarget();
+}
+
+/* ===== Month ===== */
+const monthTasks={1:["보온·야간 최저온도 관리로 저온 장해 예방","2·3화방 연속 출뢰·개화, 수정벌 활동 점검","흰가루병·잿빛곰팡이병 습도 관리","수확·선별·출하 품질 유지"],2:["주간 환기로 고온·다습 방지","꽃·과실 총채벌레 예찰 시작","비대기 EC 관리, 팁번 주의","연속 수확기 초세 회복 엽면시비"],3:["기온 상승기 총채벌레·응애 방제 강화","환기·차광으로 착색·품질 관리","꽃마름병 예방 위주 방제","수확 후반 초세 관리"],4:["응애·진딧물 급증, 천적·약제 방제","고온기 대비 환기·미스트 준비","봄철 품질 저하 방지","다음 작기 모주 선별 준비"],5:["모주 정식 및 런너 유인 시작","탄저병·시들음병 예방 관주","육묘장 차광·관수 관리","이병주 즉시 제거"],6:["자묘(런너) 받기·포트 유인","고온·다습기 탄저병 집중 예방","육묘 병해충 예찰","무병묘 관리 철저"],7:["육묘 후반 관수·차광 관리","탄저병·시들음병 예방 지속","자묘 소질(관부 굵기) 관리","정식 준비: 배지·시설 점검"],8:["화아분화 유도(단근·저온·질소 조절)","정식 상토·배지 소독 준비","묘 소독 후 정식 대기","냉방·야냉 육묘 온도 관리"],9:["아주심기(정식) 9월 상~중순","정식 직후 충분한 관수·활착","탄저병·시들음병 관주","1화방 개화 전 예방 방제"],10:["활착 후 정상 관수 전환","보온 개시(야간 10℃ 미만)","1화방 출뢰·개화, 수정벌 도입","EC 서서히 상향"],11:["1화방 개화·수정, 착과 관리","야간 보온·가온 시작","흰가루병·잿빛곰팡이 습도 관리","수확 초기 품질 관리"],12:["연속 개화·수확기 온도 관리","저온기 EC 상향, 당도 관리","환기로 결로·과습 방지","병해충 예찰 지속"]};
+const mNow=new Date().getMonth()+1;
+document.getElementById('mLabel').textContent=mNow+"월의 작업";
+document.getElementById('mTasks').innerHTML=(monthTasks[mNow]||[]).map(t=>`<li>${t}</li>`).join('');
+
+/* ===== Data ===== */
+const stages=[["육묘","4월~8월","모주에서 런너로 자묘를 받아 튼튼한 묘를 기르는 단계. 관부 굵기와 무병묘 확보가 수량을 좌우합니다.","s_seed","육묘"],["화아분화","8월~9월","저온·단일·질소 억제로 꽃눈이 형성되는 시기. 야냉·단근 처리로 분화를 앞당깁니다.","s_bud","화아분화"],["정식·활착","9월","아주심기 후 뿌리가 자리 잡는 단계. 충분한 관수와 차광으로 몸살을 줄입니다.","s_plant","정식"],["개화·수정","10월~","화방이 올라와 꽃이 피고 벌로 수정. 온도·습도 관리로 기형과를 예방합니다.","s_flower","개화"],["비대·수확","11월~5월","과실이 커지고 착색·수확이 이어지는 연속 수확기. EC·칼슘·초세 관리가 품질을 결정합니다.","s_fruit","수확"]];
+const planting=[["정식 전 준비","배지·상토 소독(태양열/화학), 원수 분석 후 양액 처방, 점적호스 점검."],["아주심기","15~18cm 간격으로 정식. 관부가 묻히지 않게, 생장점이 지면 위로 노출되도록 심습니다."],["정식 직후","즉시 충분히 관수해 활착을 돕고, 30% 내외 차광막으로 몸살을 완화합니다."],["활착기 방제","정식 후 탄저병·시들음병 예방 관주. 1주일 뒤 차광막 제거하고 정상 관수로 전환."],["보온 개시","야간 최저기온이 10℃ 미만으로 내려가면 보온을 시작합니다."],["1화방 관리","1화방 개화 전 병해충 예방 방제를 철저히 하고, 수정벌 도입 시점을 준비합니다."]];
+const temp=[["활착기 주간","23~25"],["개화·수정기 주간","23~25 (최고 28 이하)"],["개화·수정기 야간","8~10"],["비대·수확기 주간","20~23"],["비대·수확기 야간","5~7"],["최저 한계(장해)","5 미만 주의"]];
+const water=[["활착기","정식 직후~1주. 뿌리가 자리 잡도록 배지를 충분히 적십니다. 과습으로 인한 뿌리 스트레스는 피하세요."],["생육기","증산량(일사)에 맞춰 소량 다회 급액. 일사 비례 관수를 활용하면 낭비 없이 균일하게 공급됩니다."],["수확기","배지 함수량과 배액률(20~30% 목표)을 보며 조정. 야간~새벽 과습은 잿빛곰팡이 위험을 높입니다."]];
+const nut=[["EC (활착 초기)","0.8~1.0 dS/m"],["EC (생육기)","1.0~1.2 dS/m"],["EC (저온·비대기)","1.2~1.5 dS/m"],["pH (목표)","5.5~6.5 (6.0 권장)"],["배액률","20~30%"],["점검","배액 EC·pH 매일 확인"]];
+const disorders=[
+["팁번 (엽선단고사)","석회(칼슘) 결핍·이동장애","새로 나온 잎 가장자리가 갈변·괴사합니다. 실제 결핍보다 급격한 증산, EC 과다, 습도 급변으로 칼슘이 잎 끝까지 못 가서 생기는 경우가 많습니다.","야간 습도 유지로 증산 안정, EC 급변 회피, 칼슘 안정 공급, 균일 관수. 팁번은 회복이 안 되니 예방이 핵심.","팁번"],
+["기형과","수정 불량","정상과와 다른 이상한 모양. 개화기 야간 5℃ 이하 저온이나 주간 30℃ 이상 고온, 낮 15℃ 이하로 벌 활동 저하, 개화기 농약 과다가 원인입니다.","개화기 야간 5℃ 이상 보온, 주간 벌 활동 적온 유지, 총채벌레 방제, 개화기 농약 과다 금지.","기형과"],
+["선청과 (착색불량)","질소 과다","과실 끝이 붉게 익지 않고 녹색·백색으로 남습니다. 비대기·화아분화기에 질소를 많이 주면 늘어납니다.","질소 과다 회피, 균형 시비, 비대기 적정 EC 관리, 착색기 온·광 관리.","선청과"],
+["급성위조","육묘기 병 잠복 + 급증산","과실이 비대하기 시작할 무렵 갑자기 시듭니다. 육묘기 탄저병·시들음병에 감염된 포기에서 주로 나타납니다.","무병묘 사용, 활착·초세 관리, 급격한 환경 변화 회피, 이병주 제거.","급성위조"],
+["백랍과 (정부연질과)","고온·과습·붕소결핍","과 끝이 물러지거나 하얗게 됩니다. 밀식·고온·과습·붕소 부족이 겹칠 때 발생합니다.","밀식 회피, 주야간 온도·관수 조절, 환기로 과습 방지, 붕소 등 미량요소 균형.","백랍과"],
+["왜화현상","휴면 불완전·바이러스","포기 전체가 작게 위축되고 생육이 부진합니다. 불완전한 휴면 타파나 바이러스 감염이 원인입니다.","정상 저온 처리, 무병묘·바이러스 검정묘 사용, 감염 의심주 제거.","왜화현상"]];
+const diseases=[["탄저병","#B31E36","육묘기 고온·다습","런너·잎자루에 흑갈색 병반, 심하면 관부가 침해돼 급성으로 시듭니다.","비가림·통풍, 이병주 즉시 제거·소각, 무병묘, 예방 약제.","탄저병"],["시들음병","#B31E36","토양전염(푸사리움)","한쪽 잎이 작아지고 기형·황화되며 도관이 갈변합니다. 낮에 시들고 밤에 회복하다 고사합니다.","무병묘·저항성 품종, 토양·배지 소독, 연작 회피.","시들음병"],["흰가루병","#7C1428","저온·건조·밀식","잎 뒷면·과실에 흰 가루, 잎이 위로 말립니다. 설향이 다소 약합니다.","환기·습도 관리, 과번무 방지, 유황훈증·등록약제 교차.","흰가루병"],["잿빛곰팡이병","#7C1428","저온·다습","꽃·과실에 회색 곰팡이가 피고 무릅니다.","환기·난방으로 습도 낮추기, 이병 꽃·과실 제거, 예방 약제.","잿빛곰팡이병"],["꽃마름병","#7C1428","개화기 저온·다습","꽃·꽃봉오리가 갈변하며 마릅니다. 착과 불량으로 직결됩니다.","개화기 습도·온도 관리, 예방 위주 방제, 이병 화방 제거.","꽃마름병"]];
+const pests=[["총채벌레","#2F6B41","3~4월 기온 상승기","꽃이 흑갈색으로 변해 불임, 과피가 다갈색으로 딱딱해집니다.","3~4월부터 꽃·꽃봉오리 예찰, 발견 즉시 약제, 끈끈이트랩.","총채벌레"],["점박이응애","#2F6B41","고온·건조","잎 뒷면 흡즙, 잎 퇴색·황화, 심하면 거미줄. 번식 빠름.","칠레이리응애 천적, 잎 뒷면 집중 방제, 약제 교차.","점박이응애"],["진딧물","#2F6B41","봄·가을","신엽·꽃대 흡즙, 감로로 그을음병, 바이러스 매개.","황색 트랩, 천적(콜레마니진디벌), 초기 방제.","진딧물"],["온실가루이","#2F6B41","고온기","잎 뒷면 흡즙, 감로로 그을음병. 흰 성충이 날아오릅니다.","황색 끈끈이트랩, 천적, 환기·예찰 강화.","온실가루이"],["잎선충","#2F6B41","모주·육묘기","잎에 흑갈색 병반·기형, 생육 위축.","건전 모주 관리로 예방, 이병주 제거, 무병묘.","잎선충"]];
+
+/* ===== Render ===== */
+document.getElementById('stages').innerHTML=stages.map(s=>`<div class="step">${pic(s[3],s[4])}<div class="txt"><span class="per">${s[1]}</span><b>${s[0]}</b><p>${s[2]}</p></div></div>`).join('');
+document.getElementById('planting').innerHTML=planting.map((p,i)=>accHTML(p[0],`${i+1}단계`,'#5C9A6B',`<p>${p[1]}</p>`)).join('');
+document.getElementById('tempTable').innerHTML=temp.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
+document.getElementById('water').innerHTML=water.map(w=>accHTML(w[0],'관수 포인트','#5C9A6B',`<p>${w[1]}</p>`)).join('');
+document.getElementById('nutTable').innerHTML=nut.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
+function renderDis(f){f=(f||'').trim().toLowerCase();var m=function(d){return (d[0]+d[1]+d[2]+d[3]).toLowerCase().indexOf(f)>-1;};var list=disorders.filter(m);var el=document.getElementById('disorders');if(el)el.innerHTML=list.length?list.map(function(d){return accHTML(d[0],d[1],'#E4A93C',`<span class="lbl">증상·원인</span><p>${d[2]}</p><span class="lbl">대책</span><p>${d[3]}</p>`+itemBtns(d[0]),thumb(d[4],d[4]));}).join(''):'<div class="empty">검색 결과가 없어요.</div>';var w=document.getElementById('disWeb');if(w)w.innerHTML=webBar(f||'생리장해');}
+renderDis();
+function pdBody(d){return `<span class="lbl">발생 조건</span><p>${d[2]}</p><span class="lbl">증상</span><p>${d[3]}</p><span class="lbl">방제</span><p>${d[4]}</p>`+itemBtns(d[0]);}
+function renderPD(f=''){f=f.trim().toLowerCase();const m=d=>(d[0]+d[2]+d[3]+d[4]).toLowerCase().includes(f);const dz=diseases.filter(m),ps=pests.filter(m);document.getElementById('diseases').innerHTML=dz.map(d=>accHTML(d[0],'병해 · '+d[2],d[1],pdBody(d),thumb(d[5],d[5]))).join('');document.getElementById('pests').innerHTML=ps.map(d=>accHTML(d[0],'해충 · '+d[2],d[1],pdBody(d),thumb(d[5],d[5]))).join('');document.getElementById('ebD').style.display=dz.length?'flex':'none';document.getElementById('ebP').style.display=ps.length?'flex':'none';document.getElementById('noResult').style.display=(dz.length+ps.length)?'none':'block';var pw=document.getElementById('pestWeb');if(pw)pw.innerHTML=webBar(f||'병해충');}
+renderPD();
+
+/* ===== MAGMA+ manual ===== */
+const MAG=[
+['시스템 구성','MAGMA+ 구성도',`<span class="lbl">중심</span><p>마그마+ 환경제어 본체가 모든 기기를 제어합니다.</p><span class="lbl">입력(센서)</span><p>외부기상(풍향·풍속·일사·외기온·감우) + 온실내부(내부온도·습도·CO₂·함수율).</p><span class="lbl">연동</span><p>PC 온실운용 프로그램·모바일 플랫폼·GCS 서버로 원격 모니터링·제어.</p><span class="lbl">제어 대상</span><p>천창·측창·커튼, 냉·난방기·유동팬·제습기, 스프링클러·관수 등 보조기기, 양액기, 배액재활용 시스템.</p>`],
+['메인화면','시작 화면·시스템 메뉴',`<span class="lbl">구역 탭</span><p>상단의 1구역·2구역·양액시스템·배액재활용을 눌러 이동합니다.</p><span class="lbl">시스템 메뉴</span><p>프로그램설정 / 제어및기상설정 / 여닫는시간설정 / 기기교정 / 구역복사 / I/O리스트(DO·AD) / 화면타이틀설정 — 주로 설치 시 입력하는 부분입니다.</p><span class="lbl">현재 상태</span><p>외부온도·일사·누적일사·풍속·감우·일출/일몰 시각이 한눈에 표시됩니다.</p>`],
+['환기온도 설정','목표 온도·주기 관리',`<span class="lbl">기본</span><p>최대 6주기까지 설정, 보통 환기온도1을 사용합니다. 환기온도는 각 주기의 목표값이며 주기 설정에 따라 연속적으로 변합니다.</p><span class="lbl">⚠ 시간설정</span><p>[05] 시간설정은 시간 앞에 −, + 부호를 <b>반드시</b> 입력하세요.</p><span class="lbl">일사조절</span><p>일사가 최소 이하면 미적용, 최대 이상이면 조절값을 환기온도에 더하고, 그 사이면 비례해 자동 조절합니다. 누적일사조절도 동일 개념.</p><span class="lbl">습도조절</span><p>습도범위 1·2와 습도조절 1·2가 비례해 환기온도를 조절합니다.</p><span class="lbl">상승·하강시간</span><p>다음 주기로 넘어갈 때 1℃ 올리거나 내리는 데 걸리는 시간(분)입니다.</p><span class="lbl">환기차트</span><p>환기(위·파랑)와 난방(아래·빨강) 설정값을 함께 보여주고, 검정 수직선이 일출(좌)/일몰(우)입니다.</p>`],
+['천창·측창','자동 개폐 기준',`<span class="lbl">자동/수동</span><p>“자동” 글씨를 누르면 수동 전환, 수동에서는 설정개도 숫자를 직접 입력합니다.</p><span class="lbl">개폐 기준</span><p>환기설정에서 정해진 온도에 따라 천창이 열리고 닫힙니다. 제어 센서는 온·습도 1·2 또는 평균(1+2)을 선택합니다.</p><span class="lbl">온도 사역폭</span><p>환기설정온도 ±사역폭 이내면 정지, 벗어나면 작동. 예) 설정 20℃·사역폭 2℃ → 22℃에 열리기 시작, 18℃에 닫히기 시작.</p><span class="lbl">풍상·풍하창</span><p>풍상창=바람 부는 쪽, 풍하창=반대쪽. 각각 최소·최대 개도(%)를 지정합니다.</p><span class="lbl">적분적용(%)</span><p>설정 편차 이상 벌어지면 매 신호마다 편차×적분%만큼 창 위치를 변화시킵니다.</p><span class="lbl">감우·폭풍 / 풍상 지연</span><p>비·강풍 시 창 최대 개방을 제한하고, 바람 불 때 풍상창 여는 것을 지연시킬 수 있습니다.</p>`],
+['커튼 (차광·보온)','열림·닫힘 조건',`<span class="lbl">기본</span><p>외부온도·일사·실내온도·습도에 따라 커튼 개폐. 최대 커튼위치(%)로 최대 열림을 제한합니다.</p><span class="lbl">열림 조건</span><p>외부온도가 설정보다 높거나, 현재 일사가 설정보다 높거나, 둘 다일 때 열립니다.</p><span class="lbl">닫힘 조건</span><p>외부온도<(설정−사역폭) 그리고 일사<(설정−사역폭)일 때, 또는 일사가 닫힘설정 이상, 또는 최대위치가 0일 때 닫힙니다.</p><span class="lbl">전문가설정</span><p>선택1: 열림/닫힘 일사·온도 사역폭·열림단계. 선택2: 일사한계 1~4에 따라 커튼 위치를 5단계로 조절.</p>`],
+['CO₂','시비 농도·시간',`<span class="lbl">농도·시간</span><p>주기별 목표 농도와 시작·종료 시각을 설정합니다.</p><span class="lbl">사역폭 15ppm</span><p>설정보다 15ppm 낮아지면(예: 300→285) CO₂ 밸브가 열립니다.</p><span class="lbl">작동·정지시간</span><p>예) 30초 작동 후 60초 정지 반복, 설정 농도 도달 시 정지.</p><span class="lbl">절대 최저</span><p>계산값이 낮아도 최소 300ppm이 기본. 일사·풍속·천창·습도에 따라 전문가 조절 가능.</p>`],
+['분무·스프링클러·유동팬·배기팬','온·습도 보조기기',`<span class="lbl">온도 제어</span><p>가온=설정보다 낮으면 작동, 감온=설정보다 높으면 작동, 사용안함 중 선택.</p><span class="lbl">습도 제어</span><p>제습=설정보다 높으면 작동, 가습=설정보다 낮으면 작동.</p><span class="lbl">사역폭·시간</span><p>온·습도 사역폭만큼 벗어나면 정지. 작동시간·정지시간을 순차 반복합니다.</p>`],
+['훈증기','방제 가동',`<span class="lbl">가동</span><p>사용여부와 작동조건(일출·일몰 ± 시간)을 정하면 설정 기간 동안 훈증기가 가동됩니다.</p>`],
+['난방','목표 난방온도',`<span class="lbl">난방온도</span><p>현재 주기의 목표 난방온도. 난방 최저·최고를 입력해 실내온도가 그 범위를 벗어나지 않게 합니다.</p><span class="lbl">자동 조절</span><p>일사량·누적일사·습도에 따라 난방온도가 조절됩니다.</p><span class="lbl">난방차트</span><p>환기·난방 설정값을 함께 출력해 하루 온도 곡선을 확인합니다.</p>`],
+['냉난방기','냉·난방 작동',`<span class="lbl">작동</span><p>냉방=냉방온도 이상이면 작동, 난방=난방온도 이하면 작동. 설정 온도범위를 초과하면 정지합니다.</p>`],
+['3WAY 밸브','난방수 공급 제어',`<span class="lbl">기본</span><p>자동/수동 전환. 개폐단계·최소개폐폭·온도 사역폭, 공급온도 최저·최고를 설정합니다.</p><span class="lbl">동작 예</span><p>난방설정 20℃·사역폭 0.1℃ → 19.9℃ 미만 열리기 시작, 19.9~20.1℃ 정지, 20.1℃ 이상 닫힘.</p><span class="lbl">보정</span><p>일사·습도 영향 설정값에 따라 난방관 최저온도가 변경됩니다.</p>`],
+['데이터 조회 (센서·추이도)','기록·분석',`<span class="lbl">센서·개도값 보기</span><p>시작~종료 시간과 1분/5분 간격을 정해 조회하고, 엑셀 파일로 저장할 수 있습니다.</p><span class="lbl">추이도</span><p>기간을 정하면 센서별 주간·야간·기간 평균/최대/최소가 자동 계산되고 그래프로 출력됩니다.</p>`],
+['⚠ 설정 공통 주의사항','꼭 지킬 것',`<span class="lbl">저장·닫기</span><p>값을 바꾼 뒤에는 반드시 <b>저장</b>, 다른 곳으로 이동할 때는 <b>닫기</b>를 누릅니다.</p><span class="lbl">주기 순서</span><p>1→6주기 시간이 순차적으로 증가해야 합니다. 이전 주기보다 빠른 시간을 넣으면 오류입니다.</p><span class="lbl">시간 부호</span><p>시간설정에는 −, + 부호를 반드시 입력합니다.</p>`]
+];
+(function(){var el=document.getElementById('magManual');if(el)el.innerHTML=MAG.map(m=>accHTML(m[0],m[1],'#E24A6E',m[2])).join('');})();
+
+
+/* ===== Videos ===== */
+const vidsGrow=[["농사로 딸기 재배기술 · 동영상","농촌진흥청 농사로 · 생산기술·병해충·생리장해","농사로","https://www.nongsaro.go.kr/portal/farmTechMain.ps?menuId=PS65291&stdPrdlstCode=VC010804"],["딸기(촉성재배) 재배력","농사로 · 월별 작업일정 상세","농사로","https://www.nongsaro.go.kr/portal/ps/psb/psbl/workScheduleDtl.ps?menuId=PS00087&cntntsNo=30610&sKidofcomdtySeCode=VC"],["농촌진흥청 농사로TV","공식 유튜브 · 작목별 영농 영상","YouTube","https://www.youtube.com/channel/UC2KGt8uvjYQDSl0mlVO9glA"],["딸기 재배기술 재생목록","비닐하우스·영양·병해충 총정리","YouTube","https://www.youtube.com/playlist?list=PLPKk2V7iQ32DIiJubP7hV0jMl8403Ldmr"]];
+const vidsMach=[["그린씨에스 자료실 (사용설명서·영상)","마그마·마그마플러스 매뉴얼 및 교육영상","그린씨에스","http://gcsmagma.com/sub.php?PID=010503"],["그린씨에스 홈페이지","마그마 시리즈 제품 소개·설치사례","그린씨에스","http://www.gcsmagma.com/"]];
+function vidHTML(v){return `<a class="vid" href="${v[3]}" target="_blank" rel="noopener"><span class="play"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span><span class="meta"><b>${v[0]}</b><small>${v[1]}</small></span><span class="src">${v[2]}</span></a>`;}
+document.getElementById('vidGrow').innerHTML=vidsGrow.map(vidHTML).join('');
+document.getElementById('vidMach').innerHTML=vidsMach.map(vidHTML).join('');
+/* ===== In-app YouTube players ===== */
+const YT=[
+ ['L-w97QCvXSU','딸기 농사 ①','딸기 재배 현장'],
+ ['3viaArP8wXg','딸기 농사 ②','딸기 재배 현장'],
+ ['GFtrU0iDB90','딸기 농사 ③','딸기 재배 현장'],
+ ['by1HNGLrWlA','딸기 농사 ④','딸기 재배 현장']
+];
+function ytHTML(v){return `<a class="yt" href="https://youtu.be/${v[0]}" target="_blank" rel="noopener"><div class="ytthumb"><img src="https://img.youtube.com/vi/${v[0]}/hqdefault.jpg" alt="" loading="lazy" onerror="this.style.display='none'"><span class="ytplay"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span></div><div class="ytcap"><span>${v[1]}<small>${v[2]}</small></span><span class="ytopen">유튜브 ↗</span></div></a>`;}
+
+document.getElementById('ytPlayers').innerHTML=YT.map(ytHTML).join('');
+
+
+/* ===== Nutrient calculator (raw-water based) ===== */
+const ATOM={N:14.01,P:30.97,K:39.10,Ca:40.08,Mg:24.31,S:32.06};
+/* base target ppm (elemental) - 야마자키 딸기 표준 근사, EC ~1.1 */
+const TBASE={no3n:75,nh4n:14,P:46,K:117,Ca:80,Mg:24,S:32};
+/* water fields: key,label,unit */
+const WF=[['Ca','칼슘 Ca','ppm'],['Mg','마그네슘 Mg','ppm'],['K','칼륨 K','ppm'],['no3n','질산태질소 NO₃-N','ppm'],['nh4n','암모늄태 NH₄-N','ppm'],['P','인산 P','ppm'],['S','황산태황 SO₄-S','ppm'],['Na','나트륨 Na','ppm'],['Cl','염소 Cl','ppm'],['HCO3','알칼리도 HCO₃','ppm'],['pH','pH',''],['EC','EC','dS/m']];
+const TF=[['no3n','NO₃-N'],['nh4n','NH₄-N'],['P','인산 P'],['K','칼륨 K'],['Ca','칼슘 Ca'],['Mg','마그네슘 Mg'],['S','황 S']];
+const SAMPLE={Ca:30,Mg:12,K:2,no3n:3,nh4n:0,P:0.2,S:15,Na:18,Cl:22,HCO3:80,pH:7.2,EC:0.35};
+/* salts: mw, tank, provides {elem: mol per mol salt} */
+const SALT={
+ CN:{n:'질산칼슘 (4수염)',mw:236.15,t:'A',p:{Ca:1,N:2}},
+ KNO3:{n:'질산칼륨 (KNO₃)',mw:101.10,t:'A',p:{K:1,N:1}},
+ AN:{n:'질산암모늄',mw:80.04,t:'A',p:{N:2}},
+ MKP:{n:'제1인산칼륨 (MKP)',mw:136.09,t:'B',p:{P:1,K:1}},
+ MGS:{n:'황산마그네슘 (7수염)',mw:246.48,t:'B',p:{Mg:1,S:1}}
+};
+function num(id){const v=parseFloat(document.getElementById(id).value);return isNaN(v)?0:v;}
+function buildInputs(){
+  document.getElementById('waterInputs').innerHTML=WF.map(f=>`<div class="io"><label>${f[1]}</label><div class="ib"><input type="number" id="w_${f[0]}" value="0" step="any"><span class="u">${f[2]}</span></div></div>`).join('');
+  fillTarget();
+}
+function fillTarget(){
+  const factor=(VARS[curVar].ecCalc)/1.1;
+  document.getElementById('targetInputs').innerHTML=TF.map(f=>{
+    let v=TBASE[f[0]]*factor; v=f[0]==='P'||f[0]==='nh4n'?v.toFixed(0):v.toFixed(0);
+    return `<div class="io"><label>${f[1]}</label><div class="ib"><input type="number" id="t_${f[0]}" value="${v}" step="any"><span class="u">ppm</span></div></div>`;
+  }).join('');
+}
+function loadSampleWater(){for(const k in SAMPLE)document.getElementById('w_'+k).value=SAMPLE[k];}
+let calcMode='direct';
+function setMode(m){calcMode=m;document.getElementById('mDirect').classList.toggle('on',m==='direct');document.getElementById('mStock').classList.toggle('on',m==='stock');document.getElementById('concFld').style.display=m==='stock'?'block':'none';document.getElementById('volLabel').textContent=m==='stock'?'원액 탱크 용량 (L)':'총 급액량 (L)';}
+function fmt(g){return g>=1000?(g/1000).toFixed(2)+' kg':g.toFixed(1)+' g';}
+function calc(){
+  const vol=num('cVol'),conc=calcMode==='stock'?(num('cConc')||1):1,finalVol=vol*conc;
+  /* targets ppm -> mmol/L */
+  const tgt={Ca:num('t_Ca')/ATOM.Ca,Mg:num('t_Mg')/ATOM.Mg,K:num('t_K')/ATOM.K,P:num('t_P')/ATOM.P,S:num('t_S')/ATOM.S,N:(num('t_no3n')+num('t_nh4n'))/ATOM.N};
+  const wat={Ca:num('w_Ca')/ATOM.Ca,Mg:num('w_Mg')/ATOM.Mg,K:num('w_K')/ATOM.K,P:num('w_P')/ATOM.P,S:num('w_S')/ATOM.S,N:(num('w_no3n')+num('w_nh4n'))/ATOM.N};
+  const def={};['Ca','Mg','K','P','S','N'].forEach(k=>def[k]=Math.max(tgt[k]-wat[k],0));
+  /* solve salts (mmol/L) */
+  const mol={CN:0,KNO3:0,AN:0,MKP:0,MGS:0};
+  mol.CN=def.Ca;                       // Ca -> 질산칼슘 (adds 2N)
+  mol.MKP=def.P;                       // P -> MKP (adds 1K)
+  mol.MGS=def.Mg;                      // Mg -> 황산마그네슘
+  mol.KNO3=Math.max(def.K-mol.MKP,0);  // remaining K -> 질산칼륨 (adds 1N)
+  const nSoFar=mol.CN*2+mol.KNO3*1;
+  mol.AN=Math.max((def.N-nSoFar)/2,0); // remaining N -> 질산암모늄
+  /* grams for finalVol */
+  const g={};for(const k in mol)g[k]=mol[k]*SALT[k].mw*finalVol/1000;
+  /* comparison table */
+  const ppmDef={Ca:def.Ca*ATOM.Ca,Mg:def.Mg*ATOM.Mg,K:def.K*ATOM.K,P:def.P*ATOM.P,S:def.S*ATOM.S,N:def.N*ATOM.N};
+  const tPpm={Ca:num('t_Ca'),Mg:num('t_Mg'),K:num('t_K'),P:num('t_P'),S:num('t_S'),N:num('t_no3n')+num('t_nh4n')};
+  const wPpm={Ca:num('w_Ca'),Mg:num('w_Mg'),K:num('w_K'),P:num('w_P'),S:num('w_S'),N:num('w_no3n')+num('w_nh4n')};
+  const order=[['N','질소 N'],['P','인산 P'],['K','칼륨 K'],['Ca','칼슘 Ca'],['Mg','마그네슘 Mg'],['S','황 S']];
+  let cmp=`<table class="cmp"><tr><th>항목</th><th>목표</th><th>원수</th><th>추가필요</th></tr>`+order.map(o=>{const need=ppmDef[o[0]];return `<tr class="need"><td>${o[1]}</td><td>${tPpm[o[0]].toFixed(0)}</td><td>${wPpm[o[0]].toFixed(1)}</td><td>${need<0.5?'<span class=ok>충분</span>':'<b>+'+need.toFixed(0)+'</b>'}</td></tr>`;}).join('')+`</table>`;
+  /* tanks */
+  const A=['CN','KNO3','AN'].filter(k=>g[k]>0.05),B=['MKP','MGS'].filter(k=>g[k]>0.05);
+  const rows=arr=>arr.map(k=>`<div class="li"><span>${SALT[k].n}</span><b>${fmt(g[k])}</b></div>`).join('')||'<div class="li"><span>추가 없음</span><b>—</b></div>';
+  /* acid for HCO3 */
+  const hco3=num('w_HCO3')/61.02, acidMe=Math.max(hco3-0.5,0), acidML=acidMe*finalVol/13.3;
+  let acidBox=acidMe>0.05?`<div class="tank"><div class="th"><span class="b" style="background:#7A6A66">산</span>알칼리도 중화 (선택)</div><div class="li"><span>중화 필요 알칼리도</span><b>${acidMe.toFixed(2)} me/L</b></div><div class="li"><span>질산 62% 예상량</span><b>${fmt(acidML*1.37)} 상당</b></div><div class="ecline" style="margin:6px 0 0">pH가 높으면 질산·인산으로 소량씩 중화(잔류 0.5me 남김). 반드시 pH미터 확인.</div></div>`:'';
+  /* est EC */
+  const addCat=def.Ca*2+def.Mg*2+Math.max(def.K,0)+mol.AN;
+  const estEC=(num('w_EC')+addCat*0.1);
+  let head=`목표 대비 <b>부족분</b>만 비료로 보충합니다.`;
+  head+=calcMode==='stock'?` · 원액 ${vol}L×${conc}배 = 급액 ${finalVol.toLocaleString()}L`:` · 급액 ${vol.toLocaleString()}L`;
+  document.getElementById('cOut').innerHTML=`<div class="ecline">${head}</div>${cmp}
+    <div class="tank"><div class="th"><span class="b" style="background:#B31E36">A</span>A탱크 (칼슘·질산계)</div>${rows(A)}</div>
+    <div class="tank"><div class="th"><span class="b" style="background:#2F6B41">B</span>B탱크 (인산·마그네슘계)</div>${rows(B)}<div class="li"><span>미량요소 전용제</span><b>제조사 기준 별도</b></div></div>
+    ${acidBox}
+    <div class="ecline">예상 EC ≈ <b>${estEC.toFixed(2)} dS/m</b> (원수 ${num('w_EC')} + 비료). 실제값은 EC미터로 확인하세요.</div>`;
+  document.getElementById('cOut').classList.add('show');
+}
+
+/* ===== My recipes (localStorage + export) ===== */
+const RKEY='ddalgi_recipes';
+function getRecipes(){try{return JSON.parse(localStorage.getItem(RKEY)||'[]')}catch(e){return window._recs||[]}}
+function setRecipes(a){window._recs=a;try{localStorage.setItem(RKEY,JSON.stringify(a))}catch(e){}}
+function snapshot(){const o={water:{},target:{},vol:num('cVol'),mode:calcMode,conc:num('cConc')};WF.forEach(f=>o.water[f[0]]=num('w_'+f[0]));TF.forEach(f=>o.target[f[0]]=num('t_'+f[0]));return o;}
+function saveRecipe(){const name=document.getElementById('recName').value.trim()||('레시피 '+(getRecipes().length+1));const a=getRecipes();a.push(Object.assign({name:name,var:curVar,date:new Date().toLocaleDateString('ko-KR')},snapshot()));setRecipes(a);document.getElementById('recName').value='';renderRecipes();}
+function loadRecipe(i){const r=getRecipes()[i];if(!r)return;if(r.var&&VARS[r.var])selectVar(r.var);WF.forEach(f=>{if(r.water[f[0]]!=null)document.getElementById('w_'+f[0]).value=r.water[f[0]]});TF.forEach(f=>{if(r.target[f[0]]!=null)document.getElementById('t_'+f[0]).value=r.target[f[0]]});document.getElementById('cVol').value=r.vol;document.getElementById('cConc').value=r.conc||100;setMode(r.mode||'direct');calc();document.getElementById('cOut').scrollIntoView({behavior:'smooth',block:'center'});}
+function delRecipe(i){const a=getRecipes();a.splice(i,1);setRecipes(a);renderRecipes();}
+function renderRecipes(){const a=getRecipes();document.getElementById('recList').innerHTML=a.length?a.map((r,i)=>`<div class="recitem"><div class="rn"><b>${r.name}</b><small>${(VARS[r.var]?VARS[r.var].name:'')} · ${r.date||''}</small></div><button class="ld" onclick="loadRecipe(${i})">불러오기</button><button class="dl" onclick="delRecipe(${i})">삭제</button></div>`).join(''):'<div class="ecline" style="margin-top:9px">저장된 레시피가 없어요. 값을 채우고 저장해보세요.</div>';}
+function toggleExport(){const t=document.getElementById('expBox'),b=document.getElementById('impBtn');const show=t.style.display!=='block';t.style.display=show?'block':'none';b.style.display=show?'inline-block':'none';if(show)t.value=JSON.stringify(getRecipes());}
+function importRecipes(){try{const a=JSON.parse(document.getElementById('expBox').value);if(Array.isArray(a)){setRecipes(a);renderRecipes();alert('레시피 '+a.length+'개를 불러왔어요.')}}catch(e){alert('형식이 올바르지 않아요.')}}
+
+/* ===== Search ===== */
+const INDEX=[];
+Object.keys(VARS).forEach(k=>INDEX.push({title:VARS[k].name,sub:'품종 · '+VARS[k].sc,sec:'dogam',dog:'var',key:VARS[k].name+VARS[k].tr+VARS[k].watch,cat:'품종',varKey:k}));
+stages.forEach(s=>INDEX.push({title:s[0],sub:'생육 단계 · '+s[1],sec:'grow',key:s[0]+s[2],cat:'생육'}));
+planting.forEach(p=>INDEX.push({title:p[0],sub:'정식 후 관리',sec:'grow',key:p[0]+p[1],cat:'생육',open:p[0]}));
+water.forEach(w=>INDEX.push({title:w[0]+' 관수',sub:'관수 관리',sec:'grow',key:w[0]+w[1],cat:'생육',open:w[0]}));
+disorders.forEach(d=>INDEX.push({title:d[0],sub:'생리장해 · '+d[1],sec:'dogam',dog:'dis',key:d[0]+d[1]+d[2]+d[3],cat:'생리장해',open:d[0]}));
+temp.forEach(t=>INDEX.push({title:t[0],sub:'목표 온도 '+t[1]+'℃',sec:'grow',key:t[0]+t[1],cat:'온도'}));
+INDEX.push({title:'원수 기반 양액 계산기',sub:'수질 분석표로 비료량 계산',sec:'mach',key:'원수 수질 양액 레시피 계산기 ec 비료 질산칼슘 칼륨 인산 마그네슘 저장',cat:'계산기'});
+nut.forEach(n=>INDEX.push({title:n[0],sub:'양액 기준 '+n[1],sec:'mach',key:n[0]+n[1],cat:'양액'}));
+INDEX.push({title:'마그마 (MAGMA)',sub:'자동양액공급기 · 그린씨에스',sec:'mach',key:'magma 마그마 양액기 급액 ec ph',cat:'기계'});
+INDEX.push({title:'마그마플러스 (MAGMAPLUS)',sub:'복합환경제어 · 그린씨에스',sec:'mach',key:'magmaplus 마그마플러스 환경제어 센서 원격',cat:'기계'});
+MAG.forEach(m=>INDEX.push({title:m[0],sub:'MAGMA+ 설명서 · '+m[1],sec:'mach',key:m[0]+m[1]+m[2],cat:'설명서',open:m[0]}));
+INDEX.push({title:'AI 병해 진단',sub:'사진으로 병해충 진단',sec:'dogam',dog:'ai',key:'ai 사진 병해 진단 카메라 촬영 진단',cat:'AI'});
+diseases.forEach(d=>INDEX.push({title:d[0],sub:'병해 · '+d[2],sec:'dogam',dog:'pest',key:d[0]+d[2]+d[3]+d[4],cat:'병해',open:d[0]}));
+pests.forEach(d=>INDEX.push({title:d[0],sub:'해충 · '+d[2],sec:'dogam',dog:'pest',key:d[0]+d[2]+d[3]+d[4],cat:'해충',open:d[0]}));
+vidsGrow.concat(vidsMach).forEach(v=>INDEX.push({title:v[0],sub:'영상 · '+v[2],sec:'video',key:v[0]+v[1],url:v[3],cat:'영상'}));
+YT.forEach(v=>INDEX.push({title:v[1],sub:'딸기 농사 영상 (앱 재생)',sec:'video',key:v[1]+v[2]+'youtube 딸기농사 영상',cat:'영상'}));
+const q=document.getElementById('q'),clr=document.getElementById('clr'),results=document.getElementById('results'),homeMain=document.getElementById('homeMain');
+function search(term){const f=term.trim().toLowerCase();if(!f){results.style.display='none';homeMain.style.display='block';clr.style.display='none';return;}clr.style.display='block';homeMain.style.display='none';results.style.display='block';const hits=INDEX.filter(i=>(i.title+i.sub+i.key).toLowerCase().includes(f));if(!hits.length){results.innerHTML=`<div class="empty">'${term}' 앱 안에는 없어요. 웹에서 찾아볼까요?</div>`+webBar(term);return;}results.innerHTML=`<div class="res-head"><b>${hits.length}건</b> 찾음</div>`+hits.map((h,i)=>`<div class="res" data-i="${i}"><div class="rt"><b>${h.title}</b><small>${h.sub}</small></div><span class="cta">${h.cat}</span></div>`).join('');results.innerHTML+=webBar(term);[...results.querySelectorAll('.res')].forEach((el,i)=>el.onclick=()=>openHit(hits[i]));}
+function openHit(h){if(h.url){window.open(h.url,'_blank');return;}q.value='';search('');go(h.sec);
+if(h.sec==='dogam'){dogTab(h.dog||'var');
+ if(h.varKey){selectVar(h.varKey);setTimeout(function(){var c=document.getElementById('varCard');if(c)c.scrollIntoView({behavior:'smooth',block:'center'});},120);return;}
+ if(h.open){if(h.dog==='pest'){document.getElementById('qp').value='';renderPD('');}if(h.dog==='dis'){document.getElementById('qd').value='';renderDis('');}setTimeout(function(){openAcc('dogam',h.open);},150);}return;}
+if(h.open){setTimeout(function(){openAcc(h.sec,h.open);},120);}}
+function openAcc(sec,title){var heads=document.querySelectorAll('#'+sec+' .acc-head');for(var i=0;i<heads.length;i++){var b=heads[i].querySelector('.t b');if(b&&b.textContent.trim()===title){toggleAcc(heads[i]);heads[i].scrollIntoView({behavior:'smooth',block:'center'});break;}}}
+q.addEventListener('input',e=>search(e.target.value));
+clr.addEventListener('click',()=>{q.value='';search('');q.focus();});
+document.getElementById('qp').addEventListener('input',e=>renderPD(e.target.value));
+document.getElementById('qd').addEventListener('input',e=>renderDis(e.target.value));
+
+/* init */
+
+buildInputs();renderChips();selectVar('seolhyang');setMode('direct');renderRecipes();dogTab('var');
+</script>
+</body>
+</html>
